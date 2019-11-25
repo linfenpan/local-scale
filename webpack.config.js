@@ -3,7 +3,7 @@
 module.exports = {
   entry: './src/index.js',
   output: {
-    filename: 'local-scale.js',
+    filename: 'local-scale.min.js',
     path: __dirname + '/dist',
     library: {
       root: 'LocalScale',

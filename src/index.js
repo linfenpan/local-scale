@@ -137,5 +137,4 @@ class LocalScale {
   }
 }
 
-window.test = '4455';
 export default LocalScale;

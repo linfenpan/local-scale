@@ -1,0 +1,13 @@
+.local-scale {
+  transform-origin: 0% 0%;
+}
+.local-scale >:first-child {
+  position: absolute;
+  margin: 0!important;
+  top: 0!important;
+  left: 0!important;
+  width: 100%;
+}
+.local-scale-helper >:first-child {
+  position: relative;
+}

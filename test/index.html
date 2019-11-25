@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,minimal-ui,shrink-to-fit=no,viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>页面局部缩放测试</title>
+  <link href="./main.css" rel="stylesheet" />
+  <style>
+    html { font-size: 40px; }
+    .local-scale { transition: transform .1s linear; }
+  </style>
+  <script>
+    window.onerror = function(e) {
+      alert(JSON.stringify(e));
+    }
+  </script>
+</head>
+<body>
+  <div id="jsMain" class="main-content">
+    <div class="page-main">
+        <div>
+            <h1 class="banner">20元现金限量领取</h1>
+
+            <div style="padding: 2%; background: red;">
+              <div class="local-scale" data-ls-width="700" style="margin-top: 0;">
+                <div class="m-prize" style="margin: 10px;">
+                    <div class="tC">
+                        <div class="new-user-title">新用户专享</div>
+                    </div>
+                    <div class="coupon-wrap">
+                        <div class="comp-coupon coupon">
+                            <div class="coupon-cnt">
+                                <div class="coupon-left">
+                                    <div class="coupon-price">¥20</div>
+                                    <div class="coupon-type">支付券</div>
+                                </div>
+                                <div class="coupon-right">
+                                    <div class="coupon-title">满100元支付金额可用</div>
+                                    <div class="coupon-sub">自领取后3天内有效</div>
+                                </div>
+                            </div>
+                            <div class="coupon-desc">xx支付新客专享 | 指定xx支付快捷支付</div>
+                        </div>
+                    </div>
+                    <div class="tC">
+                        <a href="javascript:;" class="btn disabled">已结束</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="local-scale" style="margin-top: 3%;">
+              <div class="introduce" style="margin-top: 0;">
+                  <h2 class="title">小贴士</h2>
+                  <h3 class="subTitle">在哪里可以查看领取的优惠券？</h3>
+                  <p>在“我的券包”中查看</p>
+                  <div class="images">
+                      <img class="pull-left" src="./asset/1.jpg">
+                      <img class="pull-right" src="./asset/2.jpg">
+                      <div class="clear"></div>
+                  </div>
+                  <h3 class="subTitle">在哪个环节使用券？</h3>
+                  <p>在哪里，都可使用该优惠</p>
+                  <div class="images">
+                      <img class="pull-left" src="./asset/3.jpg">
+                      <img class="pull-right" src="./asset/4.jpg">
+                      <div class="clear"></div>
+                  </div>
+              </div>
+            </div>
+            
+            <!-- TODO 文字bug -->
+            <div class="local-scale" style="margin-top: 3%;">
+              <div class="introduce" style="margin-top: 0;">
+                  <h1 class="title">细则</h1>
+                  <div class="tip">时间：xxx到yyy日</div>
+                  <div class="text">
+                      <p>1.xx支付新用户指从未在xx支付实名认证、绑定过银行卡或使用过xx支付（快捷支付）的自然人，在期间完成xx支付实名认证并绑定了快捷支付银行卡；</p>
+                      <p>2.本优惠券限量每天100张，每个新用户（自然人）仅可领取1张，先到先得，不可重复领取；同一自然人包括但不限于一个身份号码、手机号码、银行卡等；</p>
+                      <p>3.当日未领取或名额已领完的，在期间可尝试再次领取，结束前仍未领取的，视为放弃优惠券；</p>
+                      <p>4.本优惠券仅可通过xx支付（快捷支付）的方式在付款时抵扣，其他第三方支付，包括但不限于网银、银联云闪付、微信等均不可使用；</p>
+                      <p>5.期间的xx支付新用户，在xx支付完成实名认证并绑定银行卡，可在页面领取1张满100元立减20元优惠券；</p>
+                      <p>6.本次与其他无法同时享有，需先使用掉对应优惠方可享受随机立减优惠；</p>
+                      <p>7.如交易发生退货或撤销交易，将仅退还实际支付金额，且优惠名额不再补发，视为用户自动放弃本优惠券；</p>
+                      <p>8.如有虚假交易、诈骗、套现、用于经营性目的等违法或不正常交易损害xx以及xx支付权益，将取消一切优惠并追究责任；</p>
+                      <p>9.用户参与本次即视为理解并同意本细则，xx以及xx支付将在法律法规允许的范围内保留对本次的变更权，包含但不限于参加资格、消费时间及奖励方式、暂停或取消本等操作，具体以实际公布细则为准。</p>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <!--_f9a3-->
+    </div>
+  </div>
+
+  <script src="../dist/local-scale.js"></script>
+  <script>
+    var ls = new LocalScale('.local-scale');
+    ls.start();
+    // 图片加载完成后，再更新一次，或者用 { watchLoad: true } 参数
+    window.addEventListener('load', function() {
+      ls.update();
+    });
+  </script>
+</body>
+</html>

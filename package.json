@@ -1,6 +1,6 @@
 {
-  "name": "local-scale",
-  "version": "0.0.1",
+  "name": "@lfp/local-scale",
+  "version": "0.0.2",
   "description": "local scaling for h5",
   "main": "index.js",
   "scripts": {

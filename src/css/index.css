@@ -1,4 +1,5 @@
 .local-scale {
+  position: relative;
   transform-origin: 0% 0%;
 }
 .local-scale >:first-child {
@@ -8,6 +9,16 @@
   left: 0!important;
   width: 100%;
 }
-.local-scale-helper >:first-child {
+.local-scale-bg-helper {
+  width: 100%;
+  height: 0.0000000001px;/* 让浏览器解析为 0，兼容 iphone 的异常情况 */
   position: relative;
+  overflow: hidden;
+  clear: both;
+}
+.local-scale-prepare >:first-child {
+  position: relative;
+}
+.local-scale-prepare .local-scale-bg-helper {
+  display: none;
 }

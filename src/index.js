@@ -11,7 +11,7 @@ import closet from './utils/closet';
 const KEY_WATCH_LOADED = 'data-ls-wload';
 
 /**
- * 以宽度为基准，进行局部缩放，针对 selector 的第一个子元素
+ * 以宽度为基准，进行局部缩放，针对 selector 的第一个子元素，并且 selector 下，仅且仅有1个子元素
  * @constructor
  * @param {string} [selector='.local-scale'] 被检测的选择器
  * @param {object} options 参数选项
@@ -20,7 +20,7 @@ const KEY_WATCH_LOADED = 'data-ls-wload';
  * @property {number} [options.height=0] 原始的高度；如果值是0，则进行动态计算；会被 data-ls-height 覆盖
  * @property {boolean} [options.watchResize=true] 是否监听页面缩放、旋屏等操作
  * @property {boolean} [options.watchLoad=false] 是否监听dom内的load事件
- * @property {string} [options.attr='data-ls-'] 用于覆盖默认参数的属性前缀，用于解决与当前属性有冲突的问题，一般可不管
+ * @property {string} [options.attr='data-ls'] 用于覆盖默认参数的属性前缀，用于解决与当前属性有冲突的问题，一般可不管
  * @property {function} options.parseHeight 高度计算函数，parseHeight(height, scale)
  */
 class LocalScale {
@@ -32,7 +32,7 @@ class LocalScale {
       height: 0,
       watchResize: true,
       watchLoad: false,
-      attr: 'data-ls-',
+      attr: 'data-ls',
       parseHeight(height, scale) { return height * scale; }
     }, options);
 
@@ -56,7 +56,7 @@ class LocalScale {
     // @notice 或者试试 DOMAttrModified 事件 https://developer.mozilla.org/en-US/docs/Web/API/MutationEvent
     const { options, selector } = this;
     const { root, width, height, attr, watchLoad, parseHeight } = options;
-    const cls = 'local-scale-helper';
+    const cls = 'local-scale-prepare';
 
     const $all = $list || root.querySelectorAll(selector);
     for (let i = 0, max = $all.length; i < max; i++) {
@@ -68,18 +68,54 @@ class LocalScale {
       style.webkitTransform = style.transform = '';
 
       const clientWidth = $el.clientWidth;
-      const baseWidth = Number($el.getAttribute(`${attr}width`) || width);
+      const baseWidth = Number($el.getAttribute(`${attr}-width`) || width);
       const scale = clientWidth / baseWidth;
 
       style.width = baseWidth + 'px';
       style.webkitTransform = style.transform = `scale(${ scale })`;
       
-      const clientHeight = Number($el.getAttribute(`${attr}height`) || height || $el.clientHeight);
-      style.height = parseHeight(clientHeight, scale) + 'px';
+      const clientHeight = Number($el.getAttribute(`${attr}-height`) || height || $el.clientHeight);
+      const styleHeight = parseHeight(clientHeight, 1);
+      style.height = styleHeight + 'px';
+      style.marginBottom = (scale - 1) * clientHeight + 'px';
+      this.$fixBgParent($el);
+      
+      // const $helper = this.$appendBgHelper($el);
+      // $helper.style.height = styleHeight + 'px';
+      // $helper.style.marginBottom = (scale - 1) * clientHeight + 'px';
 
       removeClass($el, cls);
       watchLoad && this.$watchLoad($el);
     }
+  }
+
+  // $appendBgHelper($el) {
+  //   const children = $el.children;
+  //   if (children.length > 1) {
+  //     return children[children.length - 1];
+  //   }
+  //   this.$fixBgParent($el);
+
+  //   const last = document.createElement('div');
+  //   last.className = 'local-scale-bg-helper';
+  //   $el.appendChild(last);
+  //   return last;
+  // }
+  
+  $fixBgParent($el) {
+    // 如果是最后一个孩子元素，负 margin 值会带来一块神奇的空白，插入一个空白元素，让它能正常显示
+    const $pt = $el.parentElement || $el.parentNode;
+    const cls = 'local-scale-bg-helper';
+    const { attr } = this.options;
+    const key = `${attr}-fix-bg`;
+    if ($pt.getAttribute(key)) { return; }
+
+    const $all = $pt.querySelectorAll(`.${cls}`);
+    const $last = $all[$all.length - 1];
+    if ($last && ($last.parentNode || $last.parentElement) === $pt) { return; }
+
+    $pt.setAttribute(key, 1);
+    $pt.insertAdjacentHTML('beforeEnd', `<div class="${cls}"></div>`);
   }
 
   $watchLoad($el) {

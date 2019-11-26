@@ -1,9 +1,11 @@
 'use strict';
 
+const pck = require('./package.json');
+
 module.exports = {
   entry: './src/index.js',
   output: {
-    filename: 'local-scale.js',
+    filename: `local-scale-${pck.version}.js`,
     path: __dirname + '/dist',
     library: {
       root: 'LocalScale',

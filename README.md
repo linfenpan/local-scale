@@ -1,4 +1,4 @@
-# local-scale v0.0.1
+# @lfp/local-scale v0.0.2
 一个移动端，局部区域等比缩放的方案。
 
 ## 背景
@@ -17,6 +17,7 @@ ls.start();
 
 `html`方面:
 ```html
+<!-- .local-scale 的div，其中的 height, width, transform, margin 都将会被改写 -->
 <div class="local-scale">
   <!-- 
     * 只能有1个子元素
@@ -43,7 +44,7 @@ new LocalScale(selector:String, options:Object);
 * @property {number} [height=0] 原始的高度；如果值是0，则进行动态计算；会被 data-ls-height 覆盖
 * @property {boolean} [watchResize=true] 是否监听页面缩放、旋屏等操作
 * @property {boolean} [watchLoad=false] 是否监听dom内的load事件
-* @property {string} [attr='data-ls-'] 用于覆盖默认参数的属性前缀，用于解决与当前属性有冲突的问题，一般可不管
+* @property {string} [attr='data-ls'] 用于覆盖默认参数的属性前缀，用于解决与当前属性有冲突的问题，一般可不管
 * @property {function} parseHeight 高度计算函数，parseHeight(height, scale) { return height * scale }
 
 ## 方法
@@ -56,6 +57,7 @@ new LocalScale(selector:String, options:Object);
 脚本会强制插入 `style`，注意避让:
 ```css
 .local-scale {
+  position: relative;
   transform-origin: 0% 0%;
 }
 .local-scale >:first-child {
@@ -65,15 +67,30 @@ new LocalScale(selector:String, options:Object);
   left: 0!important;
   width: 100%;
 }
-.local-scale-helper >:first-child {
+.local-scale-bg-helper {
+  width: 100%;
+  height: 0.0000000001px;/* 让浏览器解析为 0，兼容 iphone 的异常情况 */
   position: relative;
+  overflow: hidden;
+  clear: both;
+}
+.local-scale-prepare >:first-child {
+  position: relative;
+}
+.local-scale-prepare .local-scale-bg-helper {
+  display: none;
 }
 ```
 
 
 ## 注意事项
 
-* 整体是基于 `transform: scale` 制作的，缩放的时候，宽高会出现小数，一般可无视。实在没辙，可以用 overflow: hidden 解决宽度小数问题，用 options.parseHeight 解决高度小数的问题。
+* 整体是基于 `transform: scale` 制作的，缩放的时候，宽高会出现小数，绝大部分场景都可无视。实在没辙，可以用 overflow: hidden 解决宽度小数问题，用 options.parseHeight 解决高度小数的问题。
 * 如果是整体页面缩放，请不要使用此脚本。建议用 meta，或者 rem、vw、vh 之类的
-* 仅供个人参考学习
+* 仅供个人参考学习，实际使用请慎重~
 
+
+## 更新记录
+
+* v0.0.2 占用 local-scale 的 margin 样式
+* v0.0.2 支持 local-scale 背景设置
